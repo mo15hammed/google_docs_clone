@@ -10,7 +10,6 @@ authRouter.post('/api/signup', async (req, res) => {
 
         const { name, email, profilePic } = req.body;
         
-        // email already exists?
         let user = await User.findOne({email});
 
         if (!user) {
@@ -23,11 +22,10 @@ authRouter.post('/api/signup', async (req, res) => {
             user = await user.save();   
         }
 
-        // store data
         res.json({ user });
 
     } catch (e) {
-
+        res.status(500).json({ error: e.message });    
     }
 
 });

@@ -1,6 +1,6 @@
 const express = require("express");
 const { set, connect } = require("mongoose");
-// import authRouter from "../routes/auth";
+const cors = require("cors");
 const authRouter = require('./routes/auth.js');
 
 const PORT = process.env.PORT | 3001;
@@ -14,9 +14,10 @@ connect(DB).then(() => {
 });
 
 const app = express();
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, "0.0.0.0", () => { 
     console.log(`CONNECTED at port ${PORT}`);
 });
 
+app.use(cors());
 app.use(express.json());
 app.use(authRouter);
