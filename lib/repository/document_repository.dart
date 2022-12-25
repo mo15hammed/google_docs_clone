@@ -12,8 +12,6 @@ final documentRepositoryProvider = Provider(
   (ref) => DocumentRepository(client: Client()),
 );
 
-
-
 class DocumentRepository {
   final Client _client;
 
@@ -79,6 +77,74 @@ class DocumentRepository {
         error = ErrorModel<List<DocumentModel>>(
           error: null,
           data: docs,
+        );
+      } else {
+        error = ErrorModel(error: res.body, data: null);
+      }
+    } catch (e) {
+      error = ErrorModel(error: e.toString(), data: null);
+    }
+
+    return error;
+  }
+
+  Future<ErrorModel> updateTitle({
+    required String token,
+    required String id,
+    required String title,
+  }) async {
+    var error = ErrorModel<void>(
+      error: Strings.unexpectedError,
+      data: null,
+    );
+
+    try {
+      final res = await _client.post(
+        Uri.parse(ApiConstants.updateDocumentTitle),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: jsonEncode({
+          'id': id,
+          'title': title,
+        }),
+      );
+
+      if (res.statusCode == 200) {
+        error = ErrorModel<DocumentModel>(
+          error: null,
+          data: DocumentModel.fromJson(res.body),
+        );
+      } else {
+        error = ErrorModel(error: res.body, data: null);
+      }
+    } catch (e) {
+      error = ErrorModel(error: e.toString(), data: null);
+    }
+
+    return error;
+  }
+
+  Future<ErrorModel> getDocumentById(String token, String id) async {
+    var error = ErrorModel<void>(
+      error: Strings.unexpectedError,
+      data: null,
+    );
+
+    try {
+      final res = await _client.get(
+        Uri.parse('${ApiConstants.getDocumentById}/$id'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        error = ErrorModel<DocumentModel>(
+          error: null,
+          data: DocumentModel.fromJson(res.body),
         );
       } else {
         error = ErrorModel(error: res.body, data: null);

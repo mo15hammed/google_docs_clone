@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/strings.dart';
+
+import '../repository/auth_repository.dart';
+import '../repository/document_repository.dart';
 import '../theme/app_theme.dart';
+import '../constants/strings.dart';
 import '../constants/sizes.dart';
 import '../constants/assets_constants.dart';
+import '../models/document_model.dart';
+import '../models/error_model.dart';
+
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -24,10 +30,41 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   final QuillController _controller = QuillController.basic();
 
+  ErrorModel? errorModel;
+
+  @override
+  void initState() {
+    super.initState();
+    getDocumentData();
+  }
+
   @override
   void dispose() {
     _titleCtrl.dispose();
     super.dispose();
+  }
+
+  void updateTitle(WidgetRef ref) {
+    final token = ref.read(userProvider)!.token;
+
+    ref.read(documentRepositoryProvider).updateTitle(
+          token: token,
+          id: widget.id,
+          title: _titleCtrl.text,
+        );
+  }
+
+  void getDocumentData() async {
+    final token = ref.read(userProvider)!.token;
+
+    errorModel = await ref
+        .read(documentRepositoryProvider)
+        .getDocumentById(token, widget.id);
+
+    if (errorModel?.data != null) {
+      final doc = errorModel!.data as DocumentModel;
+      _titleCtrl.text = doc.title;
+    }
   }
 
   @override
@@ -70,13 +107,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                       borderSide: BorderSide(color: AppTheme.blue),
                     ),
                   ),
+                  onSubmitted: (value) => updateTitle(ref),
                 ),
               ),
             ),
           ],
-        ),
-        shape: Border(
-          bottom: BorderSide(color: AppTheme.grey, width: Sizes.s0_1),
         ),
       ),
       body: Center(

@@ -53,13 +53,16 @@ class AppTheme {
       ),
       splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         elevation: Sizes.s0,
         scrolledUnderElevation: Sizes.s0,
         backgroundColor: white,
         foregroundColor: black,
         centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle(
+        shape: Border(
+          bottom: BorderSide(color: AppTheme.grey, width: Sizes.s0_1),
+        ),
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
           systemNavigationBarIconBrightness: Brightness.dark,
