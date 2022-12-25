@@ -8,8 +8,11 @@ import '../constants/strings.dart';
 import '../models/document_model.dart';
 import '../models/error_model.dart';
 
-final documentRepositoryProvider =
-    Provider((ref) => DocumentRepository(client: Client()));
+final documentRepositoryProvider = Provider(
+  (ref) => DocumentRepository(client: Client()),
+);
+
+
 
 class DocumentRepository {
   final Client _client;
@@ -40,6 +43,42 @@ class DocumentRepository {
         error = ErrorModel<DocumentModel>(
           error: null,
           data: DocumentModel.fromJson(res.body),
+        );
+      } else {
+        error = ErrorModel(error: res.body, data: null);
+      }
+    } catch (e) {
+      error = ErrorModel(error: e.toString(), data: null);
+    }
+
+    return error;
+  }
+
+  Future<ErrorModel> getDocuments(String token) async {
+    var error = ErrorModel<void>(
+      error: Strings.unexpectedError,
+      data: null,
+    );
+
+    try {
+      final res = await _client.get(
+        Uri.parse(ApiConstants.getMyDocuments),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final docs = (jsonDecode(res.body) as List)
+            .map(
+              (doc) => DocumentModel.fromJson(jsonEncode(doc)),
+            )
+            .toList();
+
+        error = ErrorModel<List<DocumentModel>>(
+          error: null,
+          data: docs,
         );
       } else {
         error = ErrorModel(error: res.body, data: null);

@@ -6,4 +6,5 @@ class ApiConstants {
   static const getUserData = '$baseUrl/';
 
   static const createDocument = '$baseUrl/doc/create';
+  static const getMyDocuments = '$baseUrl/docs/me';
 }

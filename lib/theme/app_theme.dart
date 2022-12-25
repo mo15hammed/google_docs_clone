@@ -47,12 +47,6 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          // splashFactory: NoSplash.splashFactory,
-          // elevation: Sizes.s0,
-          // textStyle: ThemeText.lightTextTheme.bodyLarge,
-          // padding: const EdgeInsets.all(Sizes.s12),
-          // fixedSize: const Size.fromHeight(Sizes.s50),
-          // shape: const StadiumBorder(),
           backgroundColor: white,
           foregroundColor: black,
 
@@ -72,33 +66,6 @@ class AppTheme {
           statusBarIconBrightness: Brightness.dark,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
-        ),
-      ),
-      checkboxTheme: CheckboxThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Sizes.s4),
-        ),
-        fillColor: MaterialStateProperty.all(blue),
-        checkColor: MaterialStateProperty.all(white),
-        visualDensity: VisualDensity.compact,
-      ),
-      dividerTheme: const DividerThemeData(
-        color: lightGrey,
-        thickness: Sizes.s1,
-        space: Sizes.s32,
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        elevation: Sizes.s5,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: cyan,
-        unselectedItemColor: mediumGrey,
-        backgroundColor: white,
-      ),
-      sliderTheme: const SliderThemeData(
-        trackHeight: Sizes.s3,
-        thumbShape: RoundSliderThumbShape(
-          elevation: Sizes.s3,
-          enabledThumbRadius: Sizes.s14,
         ),
       ),
     );

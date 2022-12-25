@@ -38,4 +38,5 @@ class Sizes {
   static const s250 = 250.0;
   static const s300 = 300.0;
   static const s400 = 400.0;
+  static const s600 = 600.0;
 }
