@@ -4,4 +4,6 @@ class ApiConstants {
 
   static const signUp = '$baseUrl/api/signup';
   static const getUserData = '$baseUrl/';
+
+  static const createDocument = '$baseUrl/doc/create';
 }
