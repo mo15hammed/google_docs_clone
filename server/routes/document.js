@@ -17,7 +17,19 @@ documentRouter.post('/doc/create', auth, async (req, res) => {
         
         res.json(doc);
     } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
+documentRouter.get('/docs/me', auth, async (req, res) => {
+
+    try {
+        
+        let docs = await Document.find({ uid: req.user });
+        res.json(docs);
+
+    } catch (e) {
+        res.status(500).json({ error: e.message });
     }
 });
 
