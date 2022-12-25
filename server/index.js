@@ -2,6 +2,7 @@ const express = require("express");
 const { set, connect } = require("mongoose");
 const cors = require("cors");
 const authRouter = require('./routes/auth.js');
+const documentRouter = require("./routes/document.js");
 
 const PORT = process.env.PORT | 3001;
 
@@ -21,3 +22,4 @@ app.listen(PORT, "0.0.0.0", () => {
 app.use(cors());
 app.use(express.json());
 app.use(authRouter);
+app.use(documentRouter);
