@@ -47,7 +47,6 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.green,
         actions: [
           IconButton(
             onPressed: () => createDocument(context, ref, token),

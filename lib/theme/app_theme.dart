@@ -9,7 +9,7 @@ class AppTheme {
 
   static const Color cyanAccent = Color(0xFF88DDB5);
   static const Color cyan = Color(0xFF19C5BC);
-  static const Color blue = Color(0xFF025AB5);
+  static const Color blue = Color(0xFF1A73E8);
 
   static const Color red = Color(0xFFC22B2B);
   static const Color orange = Color(0xFFFAB001);
@@ -19,7 +19,7 @@ class AppTheme {
   static const Color lightGrey = Color(0xFFF0F4F8);
   static const Color lightGrey2 = Color(0xFFDDDDDD);
   static const Color mediumGrey = Color(0xFFACBFCF);
-  static const Color grey = Color(0xFF748A9D);
+  static final Color grey = Colors.grey.shade800;
 
   static const Color black = Color(0xFF000000);
   static const Color white = Color(0xFFFFFFFF);
@@ -36,7 +36,6 @@ class AppTheme {
       useMaterial3: true,
       brightness: lightColorScheme.brightness,
       primaryColor: lightColorScheme.primary,
-      scaffoldBackgroundColor: lightColorScheme.background,
       unselectedWidgetColor: grey,
       colorScheme: lightColorScheme,
       textTheme: ThemeText.lightTextTheme,
@@ -49,8 +48,7 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: white,
           foregroundColor: black,
-
-          minimumSize: const Size(Sizes.s150, Sizes.s50),
+          minimumSize: Size.zero,
         ),
       ),
       splashFactory: NoSplash.splashFactory,
@@ -58,7 +56,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         elevation: Sizes.s0,
         scrolledUnderElevation: Sizes.s0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: white,
         foregroundColor: black,
         centerTitle: true,
         systemOverlayStyle: SystemUiOverlayStyle(
