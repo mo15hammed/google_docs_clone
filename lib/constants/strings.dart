@@ -6,4 +6,5 @@ class Strings {
   static const unexpectedError = 'Unexpected error occurred!';
   static const untitledDocument = 'Untitled Document';
   static const share = 'Share';
+  static const linkCopied = 'Link has been copied to Clipboard';
 }

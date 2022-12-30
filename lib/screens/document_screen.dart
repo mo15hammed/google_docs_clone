@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:google_docs_clone/repository/socket_repository.dart';
+import 'package:google_docs_clone/utils/snackbar_manager.dart';
+import 'package:routemaster/routemaster.dart';
 
 import '../repository/auth_repository.dart';
 import '../repository/document_repository.dart';
@@ -11,7 +16,6 @@ import '../constants/sizes.dart';
 import '../constants/assets_constants.dart';
 import '../models/document_model.dart';
 import '../models/error_model.dart';
-
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -32,10 +36,28 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   ErrorModel? errorModel;
 
+  SocketRepository socketRepository = SocketRepository();
+
   @override
   void initState() {
     super.initState();
+    socketRepository.joinRoom(widget.id);
     getDocumentData();
+
+    socketRepository.changeListener((data) {
+      _controller.compose(
+        Delta.fromJson(data['delta']),
+        _controller.selection,
+        ChangeSource.REMOTE,
+      );
+    });
+
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      socketRepository.autoSave({
+        'room': widget.id,
+        'delta': _controller.document.toDelta(),
+      });
+    });
   }
 
   @override
@@ -64,18 +86,52 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     if (errorModel?.data != null) {
       final doc = errorModel!.data as DocumentModel;
       _titleCtrl.text = doc.title;
+
+      _controller.document = doc.content.isEmpty
+          ? Document()
+          : Document.fromDelta(Delta.fromJson(doc.content));
+
+      listenToDocumentChanges();
     }
+  }
+
+  void listenToDocumentChanges() {
+    _controller.document.changes.listen(
+      (event) {
+        // 1 -> entire content
+        // 2 -> new changes
+        // 3 -> change source (local || remote)
+
+        if (event.item3 == ChangeSource.LOCAL) {
+          final data = {
+            'delta': event.item2,
+            'room': widget.id,
+          };
+
+          socketRepository.typing(data);
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.all(Sizes.s10),
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Clipboard.setData(ClipboardData(
+                  text: 'http://localhost:3000/#/document/${widget.id}',
+                ));
+                SnackBarManager.showDefaultSnackBar(
+                  context,
+                  Strings.linkCopied,
+                );
+              },
               icon: const Icon(Icons.lock, size: Sizes.s16),
               label: const Text(Strings.share),
               style: ElevatedButton.styleFrom(
@@ -90,9 +146,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         ],
         title: Row(
           children: [
-            Image.asset(
-              AssetsConstants.docsLogo,
-              height: Sizes.s40,
+            GestureDetector(
+              onTap: () {
+                Routemaster.of(context).replace('/');
+              },
+              child: Image.asset(
+                AssetsConstants.docsLogo,
+                height: Sizes.s40,
+              ),
             ),
             const SizedBox(width: Sizes.s12),
             Flexible(
@@ -118,7 +179,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         child: Column(
           children: [
             const SizedBox(height: Sizes.s10),
-            QuillToolbar.basic(controller: _controller),
+            QuillToolbar.basic(
+              controller: _controller,
+              showSmallButton: true,
+              showAlignmentButtons: true,
+              showDirection: true,
+            ),
             const SizedBox(height: Sizes.s10),
             Expanded(
               child: SizedBox(

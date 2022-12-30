@@ -40,13 +40,13 @@ class AuthRepository {
 
     try {
       final user = await _googleSignIn.signIn();
+
       if (user != null) {
         final userAccount = UserModel(
-          name: user.displayName!,
+          name: user.displayName ?? '',
           email: user.email,
-          profilePic: user.photoUrl!,
+          profilePic: user.photoUrl ?? '',
         );
-
         final res = await _client.post(
           Uri.parse(ApiConstants.signUp),
           body: userAccount.toJson(),
