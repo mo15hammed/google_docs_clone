@@ -1,16 +1,50 @@
-# google_docs_clone
+# Google Docs Clone
 
-Google Docs Clone [Side Project]
+Google Docs Clone was developed as a side project only for educational purposes.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Key Features
 
-A few resources to get you started if this is your first Flutter project:
+* Responsive design.
+* Supports all different platforms (Android, iOS, Web, Desktop).
+* Robust navigation system.
+* Sign in with Google.
+* Creating new documents.
+* Sharing documents among users.
+* Documents live updates.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Technical Tools
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Navigator v2.0 =====> Routemaster
+* State Management ==> Riverpod
+* Custom Server =====> NodeJS, MongoDB, Express.
+* Realtime Updates ===> Socket.io
+
+
+-----------------------------------------------------------------------
+## How to run server
+
+1- Open terminal.
+
+2- run "cd server" to navigate to server project.
+
+3- run "npm install" to install all packages.
+
+4- run "npm run dev" to start the server.
+
+* Note: you need to have node v12+ installed on your machine.
+
+
+## How to run flutter
+
+1- In the terminal, run "flutter pub get" to install all packages.
+
+2- Follow the above steps to start the server.
+
+3- Go to "lib/constants/api_constants.dart" file and update "baseUrl" with your private ip address.
+
+4- Select the platform you want to run the project on, then run run project.
+
+5- If you run the project on web, make sure to run it on port "3000".
+
+* Note: Use this command to run flutter web on a specific port "flutter run -d chrome --web-port=3000".
